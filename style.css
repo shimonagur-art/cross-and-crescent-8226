@@ -82,8 +82,7 @@ body {
 .legend__dot--culture{ background: #2b6cb0; }
 .legend__dot--commerce{ background: #2f855a; }
 .legend__dot--conquest{ background: #c53030; }
-
-/* Dashed lines (Inspired by) */
+/* Dashed route lines (legend) */
 .legend__line{
   width: 40px;
   height: 0;
@@ -92,13 +91,16 @@ body {
   flex: 0 0 auto;
 }
 
-.legend__line--christianity{ border-top-color: #c53030; }
-.legend__line--islam{ border-top-color: #2f855a; }
-
-/* Centre the CCC row over the inspired-by row */
-.legend__row:first-child {
-  margin-right: 42px; /* fine-tune this value */
+/* Conquest routes = red (unchanged behaviour) */
+.legend__line--conquest{
+  border-top-color: #c53030;
 }
+
+/* Culture routes = blue (match culture dots) */
+.legend__line--culture{
+  border-top-color: #2b6cb0;
+}
+
 
 /* ================= Timeline ================= */
 
