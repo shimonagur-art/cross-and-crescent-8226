@@ -84,19 +84,23 @@ function updatePeriodUI(index) {
 }
 
 // --- Color / style helpers ---
+// ✅ UPDATED: routes now use Culture / Commerce / Conquest (case-insensitive).
+// (Kept defensive aliases so older data won't break.)
 function routeColor(influence) {
   const v = String(influence || "").trim().toLowerCase();
-  if (v === "christianity") return "#d32f2f"; // red
-  if (v === "islam") return "#2e7d32";        // green
-  return "#5e35b1";                           // purple default
+  if (v === "conquest" || v === "christianity") return "#c53030"; // red
+  if (v === "culture" || v === "cultural") return "#2b6cb0";      // blue
+  if (v === "commerce" || v === "commercial" || v === "islam") return "#2f855a"; // green
+  return "#0b4f6c"; // fallback teal
 }
 
+// ✅ UPDATED: categories now accept Culture / Commerce / Conquest.
 function categoryColor(category) {
   const v = String(category || "").trim().toLowerCase();
-  if (v === "cultural") return "#2b6cb0";     // blue
-  if (v === "commercial") return "#2f855a";   // green
-  if (v === "conquest") return "#c53030";      // red-ish
-  return "#0b4f6c";                           // fallback teal
+  if (v === "culture" || v === "cultural") return "#2b6cb0";     // blue
+  if (v === "commerce" || v === "commercial") return "#2f855a";  // green
+  if (v === "conquest") return "#c53030";                        // red-ish
+  return "#0b4f6c";                                              // fallback teal
 }
 
 // Marker visual states (bigger; base semi-transparent; hover/selected opaque)
@@ -219,12 +223,23 @@ async function animateRouteCrawl(polyline, {
   requestAnimationFrame(frame);
 }
 
+// ✅ NEW: helper for period-aware routes
+function routeVisibleInPeriod(route, periodIndex) {
+  const p = route?.periods;
+  if (!p || !Array.isArray(p) || p.length === 0) return true; // default: show always
+  return p.includes(periodIndex);
+}
+
 // --- Hover tooltip HTML (minimal) ---
 function buildHoverHTML(obj) {
   const title = escapeHtml(obj?.title || obj?.id || "Object");
   const thumb = String(obj?.hover?.thumb || "").trim();
   const yearRaw = obj?.hover?.year ?? obj?.year ?? "";
   const year = yearRaw ? escapeHtml(yearRaw) : "";
+
+  // Optional: if objects.json includes hover.location, show it
+  const locRaw = obj?.hover?.location ?? "";
+  const loc = locRaw ? escapeHtml(locRaw) : "";
 
   const imgHtml = thumb
     ? `<img class="hover-thumb" src="${escapeHtml(thumb)}" alt="${title}" />`
@@ -235,6 +250,7 @@ function buildHoverHTML(obj) {
       ${imgHtml}
       <div class="hover-meta">
         <div class="hover-title">${title}</div>
+        ${loc ? `<div class="hover-year">${loc}</div>` : ""}
         ${year ? `<div class="hover-year">${year}</div>` : ""}
       </div>
     </div>
@@ -246,6 +262,10 @@ function buildPanelHTML(obj, period) {
   const title = escapeHtml(obj?.title || obj?.id || "Object");
   const subtitle = escapeHtml(obj?.panel?.subtitle || "");
   const body = escapeHtml(obj?.panel?.body || "");
+
+  // ✅ NEW: show year/date label in panel (comes from year_lable mapping)
+  const yearRaw = obj?.panel?.year ?? obj?.hover?.year ?? obj?.year ?? "";
+  const year = yearRaw ? escapeHtml(yearRaw) : "";
 
   const tags = Array.isArray(obj?.tags) ? obj.tags : [];
   const tagHtml = tags.length
@@ -275,6 +295,7 @@ function buildPanelHTML(obj, period) {
 
   return `
     <p><strong>Selected period:</strong> ${pLabel} (${pStart}–${pEnd})</p>
+    ${year ? `<p><strong>Date:</strong> ${year}</p>` : ""}
     ${subtitle ? `<h3>${subtitle}</h3>` : ""}
     ${tagHtml}
     ${locHtml}
@@ -389,6 +410,9 @@ function drawForPeriod(periodIndex) {
       fadeInMarker(marker, marker.__baseStyle.fillOpacity, 400);
 
       for (const r of routes) {
+        // ✅ NEW: skip route if not meant for this period
+        if (!routeVisibleInPeriod(r, periodIndex)) continue;
+
         if (r?.toLat == null || r?.toLng == null) continue;
 
         const from = L.latLng(Number(loc.lat), Number(loc.lng));
