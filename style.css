@@ -44,7 +44,7 @@ body {
   font-size: 13px; 
 }
 
-/* ✅ Legend: two rows (CCC on top, Inspired-by below) */
+/* ✅ Legend: two rows (CCC on top, routes below) */
 .legend{
   display: flex;
   flex-direction: column;
@@ -82,6 +82,7 @@ body {
 .legend__dot--culture{ background: #2b6cb0; }
 .legend__dot--commerce{ background: #2f855a; }
 .legend__dot--conquest{ background: #c53030; }
+
 /* Dashed route lines (legend) */
 .legend__line{
   width: 40px;
@@ -91,16 +92,25 @@ body {
   flex: 0 0 auto;
 }
 
-/* Conquest routes = red (unchanged behaviour) */
+/* ✅ Conquest routes = red */
 .legend__line--conquest{
   border-top-color: #c53030;
 }
 
-/* Culture routes = blue (match culture dots) */
+/* ✅ Culture routes = blue (match culture dots) */
 .legend__line--culture{
   border-top-color: #2b6cb0;
 }
 
+/* ✅ Centre the CCC row over the route row */
+.legend__row:first-child {
+  margin-right: 42px; /* fine-tune this value */
+}
+
+/* ✅ Push the route row left to centre under the 3 dots */
+.legend__row:last-child {
+  margin-right: 42px; /* fine-tune this value */
+}
 
 /* ================= Timeline ================= */
 
@@ -359,6 +369,7 @@ body {
   .legend__row{
     flex-wrap: wrap;
     gap: 14px;
+    margin-right: 0; /* don’t force centring offsets on narrow screens */
   }
 
   .legend__dot{
