@@ -20,12 +20,10 @@ body {
   background: #fff;
   position: sticky;
   top: 0;
-
-  /* ✅ IMPORTANT: must sit above Leaflet (Leaflet controls can be z-index: 1000) */
   z-index: 2000;
 }
 
-/* ✅ title left + legend right */
+/* title left + legend right */
 .headerTop{
   display: flex;
   align-items: flex-start;
@@ -44,11 +42,12 @@ body {
   font-size: 13px; 
 }
 
-/* ✅ Legend: two rows (CCC on top, routes below) */
+/* ================= Legend ================= */
+
 .legend{
   display: flex;
   flex-direction: column;
-  align-items: flex-end;      /* keep it tight to top-right */
+  align-items: flex-end;
   gap: 10px;
   margin-top: 2px;
   font-size: 14px;
@@ -60,7 +59,7 @@ body {
   display: flex;
   align-items: center;
   gap: 22px;
-  flex-wrap: nowrap;          /* keep each row on ONE line */
+  flex-wrap: nowrap;
   justify-content: flex-end;
 }
 
@@ -70,7 +69,7 @@ body {
   gap: 10px;
 }
 
-/* Dots (CCC) */
+/* Dots (categories) */
 .legend__dot{
   width: 16px;
   height: 16px;
@@ -83,7 +82,7 @@ body {
 .legend__dot--commerce{ background: #2f855a; }
 .legend__dot--conquest{ background: #c53030; }
 
-/* Dashed route lines (legend) */
+/* Dashed route lines */
 .legend__line{
   width: 40px;
   height: 0;
@@ -92,24 +91,26 @@ body {
   flex: 0 0 auto;
 }
 
-/* ✅ Conquest routes = red */
-.legend__line--conquest{
-  border-top-color: #c53030;
-}
-
-/* ✅ Culture routes = blue (match culture dots) */
+/* Route colours */
 .legend__line--culture{
   border-top-color: #2b6cb0;
 }
 
-/* ✅ Centre the CCC row over the route row */
-.legend__row:first-child {
-  margin-right: 42px; /* fine-tune this value */
+.legend__line--commerce{
+  border-top-color: #2f855a;
 }
 
-/* ✅ Push the route row left to centre under the 3 dots */
+.legend__line--conquest{
+  border-top-color: #c53030;
+}
+
+/* Centre route row under dot row */
+.legend__row:first-child {
+  margin-right: 42px;
+}
+
 .legend__row:last-child {
-  margin-right: 42px; /* fine-tune this value */
+  margin-right: 42px;
 }
 
 /* ================= Timeline ================= */
@@ -124,7 +125,7 @@ body {
   width: 100%; 
 }
 
-/* Period labels (2 lines) spread evenly under slider */
+/* Period bands */
 .bands {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
@@ -144,24 +145,20 @@ body {
   user-select: none;
 }
 
-/* Hover */
 .bands span:hover {
   background: #f5f5f5;
 }
 
-/* Keyboard focus */
 .bands span:focus {
   outline: 2px solid #111;
   outline-offset: 2px;
 }
 
-/* Title line */
 .bands strong {
   display: block;
   font-weight: 500;
 }
 
-/* Year range line */
 .bands em {
   display: block;
   font-style: normal;
@@ -169,12 +166,10 @@ body {
   color: #888;
 }
 
-/* Active period highlight */
 .bands span.active {
   color: #0b4f6c;
   font-weight: 700;
   background: #e6f2fa;
-  border-bottom-color: transparent;
 }
 
 .bands span.active em {
@@ -193,8 +188,6 @@ body {
 
 .mapWrap { 
   min-height: 70vh; 
-
-  /* ✅ Helps ensure the map area forms its own stacking context */
   position: relative;
   z-index: 0;
 }
@@ -205,8 +198,6 @@ body {
   border-radius: 10px; 
   border: 1px solid #e6e6e6; 
   overflow: hidden; 
-
-  /* ✅ CRITICAL: create stacking context so Leaflet UI can't sit above the sticky header */
   position: relative;
   z-index: 0;
 }
@@ -231,10 +222,6 @@ body {
   color: #222; 
 }
 
-.panelBody p { 
-  margin-top: 0; 
-}
-
 /* ================= Attribution ================= */
 
 .attribution { 
@@ -243,12 +230,8 @@ body {
   color: #555; 
 }
 
-.attribution a { 
-  color: inherit; 
-}
+/* ================= Hover tooltip ================= */
 
-/* ================= Hover tooltip with thumbnail (Leaflet) ================= */
-/* Uses className: "hover-tooltip" so only our tooltips are affected */
 .hover-tooltip {
   background: transparent !important;
   border: none !important;
@@ -256,75 +239,8 @@ body {
   padding: 0 !important;
 }
 
-/* Prevent Leaflet focus outlines appearing as “boxes” */
 .leaflet-interactive:focus {
   outline: none !important;
-}
-
-.hover-card {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.15);
-  border-radius: 16px;
-  padding: 14px;
-  max-width: 420px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-}
-
-.hover-thumb {
-  width: 92px;
-  height: 92px;
-  object-fit: cover;
-  border-radius: 12px;
-  flex: 0 0 auto;
-  border: 1px solid #e6e6e6;
-}
-
-.hover-meta {
-  min-width: 0;
-}
-
-.hover-title {
-  font-weight: 800;
-  margin-bottom: 6px;
-  font-size: 15px;
-  line-height: 1.2;
-}
-
-/* ✅ Fix overflow: wrap + clamp (never spills out of box) */
-.hover-text {
-  font-size: 12px;
-  line-height: 1.25;
-  color: #333;
-  opacity: 0.92;
-
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* ================= Right panel image grid ================= */
-
-.panel-images {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.panel-img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 1px solid #e6e6e6;
 }
 
 /* ================= Responsive ================= */
@@ -340,36 +256,19 @@ body {
     height: 55vh; 
   }
 
-  /* Stack labels on small screens */
   .bands {
     grid-template-columns: repeat(3, 1fr);
-    row-gap: 8px;
   }
 
-  .hover-card {
-    max-width: 260px;
-  }
-
-  .hover-thumb {
-    width: 60px;
-    height: 60px;
-  }
-
-  .panel-images {
-    grid-template-columns: 1fr;
-  }
-
-  /* ✅ keep legend neat on mobile */
   .legend{
     gap: 8px;
     font-size: 13px;
   }
 
-  /* allow legend rows to wrap on small screens */
   .legend__row{
     flex-wrap: wrap;
     gap: 14px;
-    margin-right: 0; /* don’t force centring offsets on narrow screens */
+    margin-right: 0;
   }
 
   .legend__dot{
