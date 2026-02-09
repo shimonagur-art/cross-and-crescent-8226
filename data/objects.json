@@ -432,8 +432,8 @@
         "toLabel": "Rome"
       },
       {
-        "toLat": 31.9539,
-        "toLng": 35.9106,
+        "toLat": 30.0,
+        "toLng": 36.0,
         "influence": "Culture",
         "toLabel": "Aman"
       }
