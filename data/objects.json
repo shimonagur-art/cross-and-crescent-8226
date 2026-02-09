@@ -381,7 +381,7 @@
       {
         "label": "Syria",
         "lat": 33.5138,
-        "lng": 36.2765
+        "lng": 37.2000
       }
     ],
     "routes": [
@@ -421,8 +421,8 @@
     "locations": [
       {
         "label": "Syria",
-        "lat": 33.5180,
-        "lng": 36.2965
+        "lat": 33.5138,
+        "lng": 36.7500
       }
     ],
     "routes": [
@@ -573,8 +573,8 @@
     "locations": [
       {
         "label": "Damascus",
-        "lat": 33.5222,
-        "lng": 36.3165
+        "lat": 33.5138,
+        "lng": 36.2765
       }
     ],
     "routes": []
