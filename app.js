@@ -231,14 +231,16 @@ function routeVisibleInPeriod(route, periodIndex) {
 }
 
 // --- Hover tooltip HTML (minimal) ---
-function buildHoverHTML(obj) {
+// ✅ UPDATED: accept a per-marker location label, so objects with multiple
+// locations show the correct location on each marker’s hover card.
+function buildHoverHTML(obj, locLabel) {
   const title = escapeHtml(obj?.title || obj?.id || "Object");
   const thumb = String(obj?.hover?.thumb || "").trim();
   const yearRaw = obj?.hover?.year ?? obj?.year ?? "";
   const year = yearRaw ? escapeHtml(yearRaw) : "";
 
-  // Optional: if objects.json includes hover.location, show it
-  const locRaw = obj?.hover?.location ?? "";
+  // Use per-marker label first, fall back to obj.hover.location if present
+  const locRaw = locLabel ?? obj?.hover?.location ?? "";
   const loc = locRaw ? escapeHtml(locRaw) : "";
 
   const imgHtml = thumb
@@ -379,7 +381,8 @@ function drawForPeriod(periodIndex) {
       marker.__hoverStyle = hoverStyle;
       marker.__selectedStyle = selectedStyle;
 
-      marker.bindTooltip(buildHoverHTML(obj), {
+      // ✅ UPDATED: pass loc.label so hover card shows correct place per marker
+      marker.bindTooltip(buildHoverHTML(obj, loc.label), {
         direction: "top",
         offset: [0, -10],
         opacity: 1,
