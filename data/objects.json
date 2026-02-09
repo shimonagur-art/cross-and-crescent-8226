@@ -173,6 +173,7 @@
         "toLng": 12.3155,
         "influence": "conquest",
         "toLabel": "Venice"
+        "periods": [3]
       }
     ]
   },
@@ -205,7 +206,7 @@
         "lng": 12.3155
       }
     ],
-    "routes": [3]
+    "routes": []
   },
   {
     "id": "obj_006",
